@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMaster | Learn Programming</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-code"></i>
+            <span>CodeMaster</span>
+        </div>
+        <div class="hamburger" onclick="app.toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <div class="nav-links" id="navLinks">
+            <a href="#/" data-link>Home</a>
+            <a href="#/courses" data-link>Courses</a>
+            <a href="#/dashboard" data-link>Dashboard</a>
+            <a href="#/login" data-link id="loginLink">Login</a>
+            <a href="#/register" data-link id="registerLink">Register</a>
+            <a href="#" id="logoutLink" style="display:none;">Logout</a>
+            <div class="theme-toggle" onclick="app.toggleTheme()">
+                <i class="fas fa-moon"></i>
+            </div>
+        </div>
+    </nav>
+
+    <div id="app"></div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>CodeMaster</h3>
+                <p>Interactive programming education for everyone.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Courses</h3>
+                <a href="#/courses/html">HTML</a>
+                <a href="#/courses/css">CSS</a>
+                <a href="#/courses/javascript">JavaScript</a>
+                <a href="#/courses/python">Python</a>
+                <a href="#/courses/java">Java</a>
+                <a href="#/courses/csharp">C#</a>
+                <a href="#/courses/cpp">C++</a>
+            </div>
+            <div class="footer-section">
+                <h3>Links</h3>
+                <a href="#/about">About</a>
+                <a href="#/contact">Contact</a>
+                <a href="#/privacy">Privacy</a>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2025 CodeMaster. All rights reserved.
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
