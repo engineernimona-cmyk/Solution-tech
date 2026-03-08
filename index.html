@@ -3,63 +3,1823 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeMaster | Learn Programming</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>CodeMentor | Learn Programming</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for Theming */
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --danger: #f94144;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --sidebar-bg: rgba(248, 249, 250, 0.95);
+            --navbar-bg: rgba(255, 255, 255, 0.95);
+            --code-bg: #1a1a2e;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --border-radius: 8px;
+            --border-radius-lg: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary: #4895ef;
+            --primary-dark: #3a7bc8;
+            --secondary: #b5179e;
+            --light: #121212;
+            --dark: #f8f9fa;
+            --gray: #adb5bd;
+            --light-gray: #2d2d2d;
+            --card-bg: rgba(30, 30, 40, 0.9);
+            --sidebar-bg: rgba(25, 25, 35, 0.95);
+            --navbar-bg: rgba(25, 25, 35, 0.95);
+            --code-bg: #0d1117;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            transition: var(--transition);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .dark-mode body {
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+        }
+
+        /* Page Loader */
+        #page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--light);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .dark-mode #page-loader {
+            background: #121212;
+        }
+
+        #page-loader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-circle {
+            width: 80px;
+            height: 80px;
+            border: 5px solid var(--light-gray);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        .dark-mode .loader-circle {
+            border-color: #2d2d2d;
+            border-top-color: var(--primary);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--navbar-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+            transition: var(--transition);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            color: var(--accent);
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            margin-left: 40px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .navbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .theme-toggle, .login-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover, .login-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--dark);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        /* Main Layout */
+        .container {
+            display: flex;
+            min-height: calc(100vh - 70px);
+            margin-top: 70px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            padding: 20px 0;
+            overflow-y: auto;
+            height: calc(100vh - 70px);
+            position: fixed;
+            left: 0;
+            transition: var(--transition);
+            z-index: 900;
+        }
+
+        .sidebar.collapsed {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .sidebar-header h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .course-category {
+            padding: 20px 0;
+        }
+
+        .category-title {
+            padding: 0 20px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-list {
+            list-style: none;
+        }
+
+        .course-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .course-item:hover {
+            background: var(--light-gray);
+        }
+
+        .course-item.active {
+            background: rgba(67, 97, 238, 0.1);
+            border-left-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .course-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--light-gray);
+            border-radius: 4px;
+            color: var(--primary);
+        }
+
+        .course-item.active .course-icon {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            margin-left: 280px;
+            transition: var(--transition);
+            max-width: calc(100% - 280px);
+        }
+
+        .sidebar.collapsed + .main-content {
+            margin-left: 0;
+            max-width: 100%;
+        }
+
+        .course-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+
+        .course-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .course-meta {
+            display: flex;
+            gap: 15px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .progress-container {
+            margin-top: 20px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 1s ease;
+        }
+
+        /* Course Content */
+        .course-section {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .toggle-icon {
+            transition: var(--transition);
+        }
+
+        .section-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .section-content.collapsed {
+            max-height: 0;
+        }
+
+        /* Lesson Cards */
+        .lesson-card {
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+        }
+
+        .lesson-card:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow);
+        }
+
+        .lesson-card h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .lesson-card.completed {
+            border-left-color: var(--success);
+            opacity: 0.8;
+        }
+
+        /* Code Blocks */
+        .code-container {
+            position: relative;
+            margin: 20px 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .code-header {
+            background: var(--code-bg);
+            color: white;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            color: #f8f8f2;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            tab-size: 2;
+        }
+
+        /* Quiz & Exercises */
+        .quiz-container, .exercise-container {
+            background: var(--light-gray);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .quiz-question {
+            margin-bottom: 20px;
+        }
+
+        .quiz-options {
+            list-style: none;
+        }
+
+        .quiz-option {
+            padding: 12px 15px;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: rgba(76, 201, 240, 0.1);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--danger);
+            background: rgba(249, 65, 68, 0.1);
+        }
+
+        .submit-btn, .exercise-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .submit-btn:hover, .exercise-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--navbar-bg);
+            padding: 40px 20px 20px;
+            margin-top: 50px;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-section h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--dark);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 30px;
+            border-top: 1px solid var(--light-gray);
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Login Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-lg);
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(30px);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: var(--primary);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            background: var(--light-gray);
+            color: var(--dark);
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .modal-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 250px;
+            }
+            
+            .main-content {
+                margin-left: 250px;
+                max-width: calc(100% - 250px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .sidebar {
+                width: 280px;
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                max-width: 100%;
+                padding: 20px;
+            }
+            
+            .course-header h1 {
+                font-size: 2rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0 15px;
+            }
+            
+            .logo span {
+                font-size: 1.3rem;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+            
+            .course-section {
+                padding: 20px;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .ripple:focus:after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(100, 100);
+                opacity: 0;
+            }
+        }
+
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mb-10 { margin-bottom: 10px; }
+        .mb-20 { margin-bottom: 20px; }
+        .mb-30 { margin-bottom: 30px; }
+        .mt-20 { margin-top: 20px; }
+        .mt-30 { margin-top: 30px; }
+        .d-flex { display: flex; }
+        .align-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-10 { gap: 10px; }
+        .gap-20 { gap: 20px; }
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
+    <!-- Page Loader -->
+    <div id="page-loader">
+        <div class="loader-circle"></div>
+        <h2>Loading CodeMentor</h2>
+        <p>Your journey to coding mastery starts here...</p>
+    </div>
+
+    <!-- Navbar -->
     <nav class="navbar">
-        <div class="logo">
-            <i class="fas fa-code"></i>
-            <span>CodeMaster</span>
+        <a href="#" class="logo">
+            <i class="fas fa-code logo-icon"></i>
+            <span>CodeMentor</span>
+        </a>
+        
+        <div class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#courses">Courses</a>
+            <a href="#tutorials">Tutorials</a>
+            <a href="#examples">Examples</a>
+            <a href="#exercises">Exercises</a>
         </div>
-        <div class="hamburger" onclick="app.toggleMenu()">
-            <i class="fas fa-bars"></i>
-        </div>
-        <div class="nav-links" id="navLinks">
-            <a href="#/" data-link>Home</a>
-            <a href="#/courses" data-link>Courses</a>
-            <a href="#/dashboard" data-link>Dashboard</a>
-            <a href="#/login" data-link id="loginLink">Login</a>
-            <a href="#/register" data-link id="registerLink">Register</a>
-            <a href="#" id="logoutLink" style="display:none;">Logout</a>
-            <div class="theme-toggle" onclick="app.toggleTheme()">
+        
+        <div class="navbar-actions">
+            <button class="theme-toggle ripple" id="themeToggle">
                 <i class="fas fa-moon"></i>
-            </div>
+                <span>Dark Mode</span>
+            </button>
+            <button class="login-btn ripple" id="loginBtn">
+                <i class="fas fa-user"></i>
+                <span>Login</span>
+            </button>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
-    <div id="app"></div>
+    <!-- Main Layout -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Learning Path</h3>
+                <p>Select a course to begin</p>
+            </div>
+            
+            <div class="course-category">
+                <div class="category-title">
+                    <span>Frontend Development</span>
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <ul class="course-list" id="frontendCourses">
+                    <!-- Frontend courses populated by JS -->
+                </ul>
+            </div>
+            
+            <div class="course-category">
+                <div class="category-title">
+                    <span>Backend Development</span>
+                    <i class="fas fa-server"></i>
+                </div>
+                <ul class="course-list" id="backendCourses">
+                    <!-- Backend courses populated by JS -->
+                </ul>
+            </div>
+            
+            <div class="course-category">
+                <div class="category-title">
+                    <span>Your Progress</span>
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Overall Progress</span>
+                        <span id="overallProgress">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
 
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <div class="course-header">
+                <h1>Welcome to CodeMentor</h1>
+                <p class="mb-20">Learn programming with hands-on tutorials, examples, and exercises. Start with any course below.</p>
+                
+                <div class="course-meta">
+                    <span><i class="fas fa-book-open"></i> 5 Courses</span>
+                    <span><i class="fas fa-clock"></i> 120+ Lessons</span>
+                    <span><i class="fas fa-check-circle"></i> Beginner Friendly</span>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Your Learning Progress</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="userProgressFill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course content will be dynamically loaded here -->
+            <div id="courseContent">
+                <div class="course-section">
+                    <div class="section-header">
+                        <h2>Getting Started</h2>
+                    </div>
+                    <div class="section-content">
+                        <p>Welcome to CodeMentor! This is a modern educational platform for learning programming and web technologies.</p>
+                        <p>Select a course from the sidebar to begin your learning journey. Each course includes:</p>
+                        <ul class="mb-20">
+                            <li>Step-by-step tutorials</li>
+                            <li>Interactive code examples</li>
+                            <li>Practice exercises</li>
+                            <li>Quizzes to test your knowledge</li>
+                            <li>Mini projects to build</li>
+                        </ul>
+                        <p>Start with HTML if you're new to web development, or jump to any language you want to learn.</p>
+                    </div>
+                </div>
+                
+                <div class="course-section">
+                    <div class="section-header">
+                        <h2>Available Courses</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="lesson-card" data-course="html">
+                            <h3>HTML - HyperText Markup Language</h3>
+                            <p>The standard markup language for creating web pages. Learn structure, elements, and semantics.</p>
+                        </div>
+                        
+                        <div class="lesson-card" data-course="css">
+                            <h3>CSS - Cascading Style Sheets</h3>
+                            <p>Style your web pages with colors, layouts, animations, and responsive design techniques.</p>
+                        </div>
+                        
+                        <div class="lesson-card" data-course="javascript">
+                            <h3>JavaScript</h3>
+                            <p>Make your websites interactive with the programming language of the web.</p>
+                        </div>
+                        
+                        <div class="lesson-card" data-course="python">
+                            <h3>Python</h3>
+                            <p>A versatile, beginner-friendly language for web development, data science, and automation.</p>
+                        </div>
+                        
+                        <div class="lesson-card" data-course="java">
+                            <h3>Java</h3>
+                            <p>An object-oriented programming language used for building enterprise-scale applications.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
-                <h3>CodeMaster</h3>
-                <p>Interactive programming education for everyone.</p>
+                <h3>CodeMentor</h3>
+                <p>Learn programming with our comprehensive tutorials, references, and examples designed for beginners.</p>
             </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#courses">Courses</a></li>
+                    <li><a href="#tutorials">Tutorials</a></li>
+                    <li><a href="#examples">Examples</a></li>
+                </ul>
+            </div>
+            
             <div class="footer-section">
                 <h3>Courses</h3>
-                <a href="#/courses/html">HTML</a>
-                <a href="#/courses/css">CSS</a>
-                <a href="#/courses/javascript">JavaScript</a>
-                <a href="#/courses/python">Python</a>
-                <a href="#/courses/java">Java</a>
-                <a href="#/courses/csharp">C#</a>
-                <a href="#/courses/cpp">C++</a>
+                <ul class="footer-links">
+                    <li><a href="#" data-course="html">HTML</a></li>
+                    <li><a href="#" data-course="css">CSS</a></li>
+                    <li><a href="#" data-course="javascript">JavaScript</a></li>
+                    <li><a href="#" data-course="python">Python</a></li>
+                </ul>
             </div>
+            
             <div class="footer-section">
-                <h3>Links</h3>
-                <a href="#/about">About</a>
-                <a href="#/contact">Contact</a>
-                <a href="#/privacy">Privacy</a>
+                <h3>Connect</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-envelope"></i> Contact</a></li>
+                    <li><a href="#"><i class="fab fa-github"></i> GitHub</a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                    <li><a href="#"><i class="fab fa-discord"></i> Discord</a></li>
+                </ul>
             </div>
         </div>
+        
         <div class="copyright">
-            &copy; 2025 CodeMaster. All rights reserved.
+            <p>&copy; 2023 CodeMentor. All rights reserved. | Designed for educational purposes.</p>
         </div>
     </footer>
 
-    <script src="main.js"></script>
+    <!-- Login Modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Welcome Back</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                
+                <button type="submit" class="modal-btn ripple">Sign In</button>
+                
+                <div class="form-footer">
+                    <p>Don't have an account? <a href="#" id="showRegister">Register here</a></p>
+                </div>
+            </form>
+            
+            <form id="registerForm" class="hidden">
+                <div class="form-group">
+                    <label for="regName">Full Name</label>
+                    <input type="text" id="regName" placeholder="John Doe" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="regEmail">Email Address</label>
+                    <input type="email" id="regEmail" placeholder="you@example.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" placeholder="Create a password" required>
+                </div>
+                
+                <button type="submit" class="modal-btn ripple">Create Account</button>
+                
+                <div class="form-footer">
+                    <p>Already have an account? <a href="#" id="showLogin">Sign in here</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Course Data - Full structured outlines for each course
+        const courses = {
+            html: {
+                title: "HTML Course",
+                description: "Learn HTML (HyperText Markup Language) - the standard markup language for creating web pages.",
+                icon: "fab fa-html5",
+                color: "#e34c26",
+                outline: [
+                    {
+                        title: "Introduction to HTML",
+                        content: `
+                            <p>HTML is the foundation of all web pages. It provides the structure and content of a website.</p>
+                            <p>In this course, you'll learn how to create well-structured HTML documents using semantic elements.</p>
+                            <h3>What you'll learn:</h3>
+                            <ul>
+                                <li>HTML document structure</li>
+                                <li>Working with text, links, and images</li>
+                                <li>Creating forms and tables</li>
+                                <li>HTML5 semantic elements</li>
+                                <li>Best practices for accessibility</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "Learning Objectives",
+                        content: `
+                            <p>By the end of this course, you will be able to:</p>
+                            <ul>
+                                <li>Create a complete HTML page from scratch</li>
+                                <li>Use semantic HTML5 elements appropriately</li>
+                                <li>Build accessible web forms</li>
+                                <li>Embed multimedia content</li>
+                                <li>Structure data with tables</li>
+                                <li>Validate HTML code</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "Prerequisites",
+                        content: `
+                            <p>This course is designed for absolute beginners. No prior programming experience is required.</p>
+                            <p>You'll need:</p>
+                            <ul>
+                                <li>A text editor (VS Code, Sublime Text, or similar)</li>
+                                <li>A modern web browser (Chrome, Firefox, Edge)</li>
+                                <li>Basic computer skills</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "Basic Concepts",
+                        content: `
+                            <h3>HTML Elements and Tags</h3>
+                            <p>HTML uses tags to define elements. Tags are enclosed in angle brackets like <code>&lt;tagname&gt;</code>.</p>
+                            
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>html</span>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                                <pre class="code-block"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My First Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;Hello World&lt;/h1&gt;
+    &lt;p&gt;This is my first HTML page.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                            </div>
+                            
+                            <h3 class="mt-20">HTML Attributes</h3>
+                            <p>Attributes provide additional information about elements. They are always specified in the start tag.</p>
+                            <div class="code-container">
+                                <div class="code-header">
+                                    <span>html</span>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                                <pre class="code-block"><code>&lt;a href="https://example.com"&gt;Visit Example&lt;/a&gt;
+&lt;img src="image.jpg" alt="Description"&gt;
+&lt;input type="text" id="name" name="name"&gt;</code></pre>
+                            </div>
+                        `
+                    },
+                    {
+                        title: "Detailed Lessons",
+                        content: `
+                            <div class="lesson-card">
+                                <h3>Lesson 1: HTML Document Structure</h3>
+                                <p>Learn the basic structure of an HTML5 document including doctype, html, head, and body elements.</p>
+                            </div>
+                            
+                            <div class="lesson-card">
+                                <h3>Lesson 2: Text Formatting</h3>
+                                <p>Work with headings, paragraphs, lists, and text formatting tags like strong, em, and mark.</p>
+                            </div>
+                            
+                            <div class="lesson-card">
+                                <h3>Lesson 3: Links and Images</h3>
+                                <p>Create hyperlinks to other pages and embed images with proper alt text for accessibility.</p>
+                            </div>
+                            
+                            <div class="lesson-card">
+                                <h3>Lesson 4: HTML Forms</h3>
+                                <p>Build interactive forms with various input types, labels, and submit buttons.</p>
+                            </div>
+                            
+                            <div class="lesson-card">
+                                <h3>Lesson 5: Tables and Lists</h3>
+                                <p>Organize data with tables and create ordered/unordered lists for content structuring.</p>
+                            </div>
+                            
+                            <div class="lesson-card">
+                                <h3>Lesson 6: Semantic HTML5</h3>
+                                <p>Use modern semantic elements like header, nav, main, article, section, and footer.</p>
+                            </div>
+                        `
+                    },
+                    {
+                        title: "Course Materials",
+                        content: `
+                            <h3>Resources for Learning HTML</h3>
+                            <ul>
+                                <li><a href="#" class="material-link">HTML Cheat Sheet (PDF)</a></li>
+                                <li><a href="#" class="material-link">HTML5 Element Reference Guide</a></li>
+                                <li><a href="#" class="material-link">Accessibility Checklist</a></li>
+                                <li><a href="#" class="material-link">HTML Validation Tool</a></li>
+                            </ul>
+                            
+                            <h3 class="mt-20">Recommended Tools</h3>
+                            <ul>
+                                <li>Visual Studio Code with Live Server extension</li>
+                                <li>Chrome DevTools for debugging</li>
+                                <li>W3C HTML Validator</li>
+                                <li>Can I Use for browser compatibility</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "Practice Exercises",
+                        content: `
+                            <div class="exercise-container">
+                                <h3>Exercise 1: Create a Personal Bio Page</h3>
+                                <p>Create an HTML page that includes:</p>
+                                <ul>
+                                    <li>A heading with your name</li>
+                                    <li>A paragraph about yourself</li>
+                                    <li>An image (use a placeholder if needed)</li>
+                                    <li>A link to your favorite website</li>
+                                    <li>A list of your hobbies</li>
+                                </ul>
+                                <button class="exercise-btn">Show Solution</button>
+                                <div class="solution hidden mt-20">
+                                    <div class="code-container">
+                                        <div class="code-header">
+                                            <span>html</span>
+                                            <button class="copy-btn">Copy</button>
+                                        </div>
+                                        <pre class="code-block"><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;My Bio&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;John Doe&lt;/h1&gt;
+    &lt;img src="profile.jpg" alt="John Doe" width="200"&gt;
+    &lt;p&gt;I'm a web developer learning HTML.&lt;/p&gt;
+    &lt;p&gt;Visit my favorite site: &lt;a href="https://github.com"&gt;GitHub&lt;/a&gt;&lt;/p&gt;
+    &lt;h2&gt;My Hobbies&lt;/h2&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Coding&lt;/li&gt;
+        &lt;li&gt;Reading&lt;/li&gt;
+        &lt;li&gt;Hiking&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                    },
+                    {
+                        title: "Quiz: Test Your HTML Knowledge",
+                        content: `
+                            <div class="quiz-container">
+                                <div class="quiz-question">
+                                    <h3>Question 1: What does HTML stand for?</h3>
+                                    <ul class="quiz-options">
+                                        <li data-correct="true">HyperText Markup Language</li>
+                                        <li>HyperTransfer Markup Language</li>
+                                        <li>HighText Machine Language</li>
+                                        <li>HyperText Machine Language</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="quiz-question">
+                                    <h3>Question 2: Which tag is used for the largest heading?</h3>
+                                    <ul class="quiz-options">
+                                        <li>&lt;head&gt;</li>
+                                        <li data-correct="true">&lt;h1&gt;</li>
+                                        <li>&lt;h6&gt;</li>
+                                        <li>&lt;header&gt;</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="quiz-question">
+                                    <h3>Question 3: What is the correct HTML for inserting an image?</h3>
+                                    <ul class="quiz-options">
+                                        <li>&lt;img href="image.jpg"&gt;</li>
+                                        <li>&lt;image src="image.jpg"&gt;</li>
+                                        <li data-correct="true">&lt;img src="image.jpg" alt="description"&gt;</li>
+                                        <li>&lt;img alt="description"&gt;image.jpg&lt;/img&gt;</li>
+                                    </ul>
+                                </div>
+                                
+                                <button class="submit-btn">Submit Answers</button>
+                            </div>
+                        `
+                    },
+                    {
+                        title: "Mini Project: Build a Recipe Page",
+                        content: `
+                            <h3>Project Description</h3>
+                            <p>Create a complete recipe page for your favorite dish using semantic HTML5 elements.</p>
+                            
+                            <h3>Requirements:</h3>
+                            <ul>
+                                <li>Use appropriate headings (h1, h2, etc.)</li>
+                                <li>Include an image of the dish</li>
+                                <li>Create an ingredients list (unordered list)</li>
+                                <li>Create step-by-step instructions (ordered list)</li>
+                                <li>Add a table for nutritional information</li>
+                                <li>Include a footer with copyright information</li>
+                                <li>Make sure the page is accessible (use alt text, proper headings)</li>
+                            </ul>
+                            
+                            <h3>Project Submission</h3>
+                            <p>Once completed, validate your HTML using the <a href="https://validator.w3.org/" target="_blank">W3C Validator</a> and fix any errors.</p>
+                        `
+                    },
+                    {
+                        title: "Summary",
+                        content: `
+                            <h3>What You've Learned</h3>
+                            <p>Throughout this HTML course, you've learned how to:</p>
+                            <ul>
+                                <li>Create the basic structure of an HTML document</li>
+                                <li>Work with text, links, images, and multimedia</li>
+                                <li>Build forms to collect user input</li>
+                                <li>Organize content with tables and lists</li>
+                                <li>Use semantic HTML5 elements for better structure and accessibility</li>
+                                <li>Validate your HTML code</li>
+                            </ul>
+                            
+                            <h3>Key Takeaways</h3>
+                            <ul>
+                                <li>HTML provides the structure of a web page</li>
+                                <li>Semantic HTML improves accessibility and SEO</li>
+                                <li>Always validate your HTML code</li>
+                                <li>Use alt text for images for accessibility</li>
+                                <li>Keep your code clean and well-indented</li>
+                            </ul>
+                        `
+                    },
+                    {
+                        title: "Next Steps / Advanced Topics",
+                        content: `
+                            <h3>Continue Your Learning Journey</h3>
+                            <p>Now that you've mastered HTML, here's what to learn next:</p>
+                            
+                            <div class="lesson-card" data-course="css">
+                                <h3>CSS - Styling Your Web Pages</h3>
+                                <p>Learn how to style your HTML with colors, layouts, fonts, and responsive design.</p>
+                            </div>
+                            
+                            <div class="lesson-card" data-course="javascript">
+                                <h3>JavaScript - Adding Interactivity</h3>
+                                <p>Make your web pages dynamic and interactive with JavaScript programming.</p>
+                            </div>
+                            
+                            <h3 class="mt-20">Advanced HTML Topics to Explore</h3>
+                            <ul>
+                                <li>HTML Canvas for drawing graphics</li>
+                                <li>SVG for vector graphics</li>
+                                <li>Web Components and Custom Elements</li>
+                                <li>HTML Accessibility API (ARIA)</li>
+                                <li>Progressive Web Apps (PWAs)</li>
+                            </ul>
+                        `
+                    }
+                ]
+            },
+            css: {
+                title: "CSS Course",
+                description: "Learn CSS (Cascading Style Sheets) - the language for styling web pages.",
+                icon: "fab fa-css3-alt",
+                color: "#264de4",
+                outline: [] // Similar structure as HTML
+            },
+            javascript: {
+                title: "JavaScript Course",
+                description: "Learn JavaScript - the programming language that makes web pages interactive.",
+                icon: "fab fa-js-square",
+                color: "#f0db4f",
+                outline: [] // Similar structure as HTML
+            },
+            python: {
+                title: "Python Course",
+                description: "Learn Python - a versatile programming language for web development, data science, and more.",
+                icon: "fab fa-python",
+                color: "#3776ab",
+                outline: [] // Similar structure as HTML
+            },
+            java: {
+                title: "Java Course",
+                description: "Learn Java - an object-oriented programming language for building enterprise applications.",
+                icon: "fab fa-java",
+                color: "#007396",
+                outline: [] // Similar structure as HTML
+            }
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide page loader after 1.5 seconds
+            setTimeout(() => {
+                document.getElementById('page-loader').classList.add('fade-out');
+            }, 1500);
+
+            // Initialize courses in sidebar
+            initializeCourses();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Load user progress from localStorage
+            loadUserProgress();
+            
+            // Initialize copy buttons for code blocks
+            initializeCopyButtons();
+        });
+
+        // Initialize course lists in sidebar
+        function initializeCourses() {
+            const frontendCourses = document.getElementById('frontendCourses');
+            const backendCourses = document.getElementById('backendCourses');
+            
+            // Frontend courses
+            const frontend = ['html', 'css', 'javascript'];
+            frontend.forEach(courseId => {
+                const course = courses[courseId];
+                const li = document.createElement('li');
+                li.className = 'course-item';
+                li.dataset.course = courseId;
+                li.innerHTML = `
+                    <div class="course-icon" style="background-color: ${course.color}20; color: ${course.color}">
+                        <i class="${course.icon}"></i>
+                    </div>
+                    <span>${course.title}</span>
+                `;
+                frontendCourses.appendChild(li);
+            });
+            
+            // Backend courses
+            const backend = ['python', 'java'];
+            backend.forEach(courseId => {
+                const course = courses[courseId];
+                const li = document.createElement('li');
+                li.className = 'course-item';
+                li.dataset.course = courseId;
+                li.innerHTML = `
+                    <div class="course-icon" style="background-color: ${course.color}20; color: ${course.color}">
+                        <i class="${course.icon}"></i>
+                    </div>
+                    <span>${course.title}</span>
+                `;
+                backendCourses.appendChild(li);
+            });
+        }
+
+        // Set up all event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+            
+            // Login modal
+            document.getElementById('loginBtn').addEventListener('click', () => {
+                document.getElementById('loginModal').classList.add('active');
+            });
+            
+            // Close modal
+            document.getElementById('closeModal').addEventListener('click', () => {
+                document.getElementById('loginModal').classList.remove('active');
+            });
+            
+            // Switch between login and register forms
+            document.getElementById('showRegister').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('registerForm').classList.remove('hidden');
+            });
+            
+            document.getElementById('showLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('registerForm').classList.add('hidden');
+                document.getElementById('loginForm').classList.remove('hidden');
+            });
+            
+            // Form submissions
+            document.getElementById('loginForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Login functionality would connect to a backend in a real application.');
+                document.getElementById('loginModal').classList.remove('active');
+            });
+            
+            document.getElementById('registerForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Registration functionality would connect to a backend in a real application.');
+                document.getElementById('loginModal').classList.remove('active');
+            });
+            
+            // Hamburger menu for mobile
+            document.getElementById('hamburger').addEventListener('click', toggleSidebar);
+            
+            // Course selection
+            document.querySelectorAll('.course-item, .lesson-card[data-course], .footer-links a[data-course]').forEach(item => {
+                item.addEventListener('click', function() {
+                    const courseId = this.dataset.course;
+                    if (courseId) {
+                        loadCourse(courseId);
+                        // Close sidebar on mobile after selection
+                        if (window.innerWidth <= 768) {
+                            document.getElementById('sidebar').classList.remove('active');
+                        }
+                    }
+                });
+            });
+            
+            // Section toggling (accordion)
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.section-header')) {
+                    const header = e.target.closest('.section-header');
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('.toggle-icon i');
+                    
+                    if (content.classList.contains('collapsed')) {
+                        content.classList.remove('collapsed');
+                        if (icon) icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                    } else {
+                        content.classList.add('collapsed');
+                        if (icon) icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                    }
+                }
+                
+                // Quiz option selection
+                if (e.target.closest('.quiz-option')) {
+                    const option = e.target.closest('.quiz-option');
+                    const question = option.parentElement;
+                    
+                    // Remove selected class from all options in this question
+                    question.querySelectorAll('.quiz-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    option.classList.add('selected');
+                }
+                
+                // Submit quiz answers
+                if (e.target.closest('.submit-btn')) {
+                    const quizContainer = e.target.closest('.quiz-container');
+                    const options = quizContainer.querySelectorAll('.quiz-option');
+                    
+                    options.forEach(option => {
+                        if (option.dataset.correct === 'true') {
+                            option.classList.add('correct');
+                        } else if (option.classList.contains('selected')) {
+                            option.classList.add('incorrect');
+                        }
+                    });
+                    
+                    // Show result
+                    const selectedCorrect = quizContainer.querySelectorAll('.quiz-option.selected[data-correct="true"]').length;
+                    const totalQuestions = quizContainer.querySelectorAll('.quiz-question').length;
+                    
+                    alert(`You got ${selectedCorrect} out of ${totalQuestions} correct!`);
+                    
+                    // Update progress
+                    updateProgress(5);
+                }
+                
+                // Show exercise solution
+                if (e.target.closest('.exercise-btn')) {
+                    const btn = e.target.closest('.exercise-btn');
+                    const solution = btn.nextElementSibling;
+                    solution.classList.toggle('hidden');
+                    btn.textContent = solution.classList.contains('hidden') ? 'Show Solution' : 'Hide Solution';
+                    
+                    // Update progress
+                    updateProgress(3);
+                }
+            });
+            
+            // Close modal when clicking outside
+            document.getElementById('loginModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        }
+
+        // Toggle dark/light theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const themeToggle = document.getElementById('themeToggle');
+            const icon = themeToggle.querySelector('i');
+            const text = themeToggle.querySelector('span');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                icon.className = 'fas fa-sun';
+                text.textContent = 'Light Mode';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.className = 'fas fa-moon';
+                text.textContent = 'Dark Mode';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        // Toggle sidebar (mobile)
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            
+            // Animate hamburger to X
+            const spans = document.querySelectorAll('.hamburger span');
+            if (document.getElementById('sidebar').classList.contains('active')) {
+                spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+                spans[1].style.opacity = '0';
+                spans[2].style.transform = 'rotate(-45deg) translate(7px, -6px)';
+            } else {
+                spans[0].style.transform = 'none';
+                spans[1].style.opacity = '1';
+                spans[2].style.transform = 'none';
+            }
+        }
+
+        // Load course content
+        function loadCourse(courseId) {
+            const course = courses[courseId];
+            const mainContent = document.getElementById('mainContent');
+            
+            // Update active course in sidebar
+            document.querySelectorAll('.course-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.course === courseId) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // Update course header
+            const headerHTML = `
+                <h1>${course.title}</h1>
+                <p class="mb-20">${course.description}</p>
+                
+                <div class="course-meta">
+                    <span><i class="fas fa-book-open"></i> ${course.outline.length} Modules</span>
+                    <span><i class="fas fa-clock"></i> ${course.outline.length * 2} Hours</span>
+                    <span><i class="fas fa-check-circle"></i> Beginner Friendly</span>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Your Progress in this Course</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="userProgressFill"></div>
+                    </div>
+                </div>
+            `;
+            
+            mainContent.querySelector('.course-header').innerHTML = headerHTML;
+            
+            // Generate course content
+            const courseContent = document.getElementById('courseContent');
+            courseContent.innerHTML = '';
+            
+            course.outline.forEach((section, index) => {
+                const sectionElement = document.createElement('div');
+                sectionElement.className = 'course-section';
+                sectionElement.innerHTML = `
+                    <div class="section-header">
+                        <h2>${section.title}</h2>
+                        <div class="toggle-icon">
+                            <i class="fas fa-chevron-up"></i>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        ${section.content}
+                    </div>
+                `;
+                courseContent.appendChild(sectionElement);
+            });
+            
+            // Initialize copy buttons for new code blocks
+            initializeCopyButtons();
+            
+            // Update progress for this course
+            updateCourseProgress(courseId);
+            
+            // Smooth scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize copy buttons for code blocks
+        function initializeCopyButtons() {
+            document.querySelectorAll('.copy-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const codeBlock = this.closest('.code-container').querySelector('.code-block');
+                    const code = codeBlock.textContent;
+                    
+                    // Copy to clipboard
+                    navigator.clipboard.writeText(code).then(() => {
+                        const originalText = this.textContent;
+                        this.textContent = 'Copied!';
+                        this.style.background = 'var(--success)';
+                        
+                        setTimeout(() => {
+                            this.textContent = originalText;
+                            this.style.background = '';
+                        }, 2000);
+                    });
+                });
+            });
+        }
+
+        // Load user progress from localStorage
+        function loadUserProgress() {
+            const progress = localStorage.getItem('userProgress') || 0;
+            updateProgressBar(progress);
+        }
+
+        // Update user progress
+        function updateProgress(points) {
+            let progress = parseInt(localStorage.getItem('userProgress') || 0);
+            progress += points;
+            
+            if (progress > 100) progress = 100;
+            
+            localStorage.setItem('userProgress', progress);
+            updateProgressBar(progress);
+        }
+
+        // Update progress bar display
+        function updateProgressBar(progress) {
+            const progressFill = document.getElementById('progressFill');
+            const userProgressFill = document.getElementById('userProgressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const overallProgress = document.getElementById('overallProgress');
+            
+            if (progressFill) {
+                progressFill.style.width = `${progress}%`;
+            }
+            
+            if (userProgressFill) {
+                userProgressFill.style.width = `${progress}%`;
+            }
+            
+            if (progressPercent) {
+                progressPercent.textContent = `${progress}%`;
+            }
+            
+            if (overallProgress) {
+                overallProgress.textContent = `${progress}%`;
+            }
+        }
+
+        // Update course-specific progress
+        function updateCourseProgress(courseId) {
+            const courseProgress = localStorage.getItem(`progress_${courseId}`) || 0;
+            const progressFill = document.getElementById('userProgressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            
+            if (progressFill) {
+                progressFill.style.width = `${courseProgress}%`;
+            }
+            
+            if (progressPercent) {
+                progressPercent.textContent = `${courseProgress}%`;
+            }
+        }
+
+        // Check for saved theme preference
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeToggle').querySelector('i').className = 'fas fa-sun';
+            document.getElementById('themeToggle').querySelector('span').textContent = 'Light Mode';
+        }
+
+        // Sample content for other courses (truncated for brevity)
+        // In a full implementation, each course would have complete outlines
+        courses.css.outline = courses.html.outline.map(section => ({
+            ...section,
+            content: section.content.replace(/HTML/g, 'CSS').replace(/html/gi, 'css')
+        }));
+        
+        courses.javascript.outline = courses.html.outline.map(section => ({
+            ...section,
+            content: section.content.replace(/HTML/g, 'JavaScript').replace(/html/gi, 'javascript')
+        }));
+        
+        courses.python.outline = courses.html.outline.map(section => ({
+            ...section,
+            content: section.content.replace(/HTML/g, 'Python').replace(/html/gi, 'python')
+        }));
+        
+        courses.java.outline = courses.html.outline.map(section => ({
+            ...section,
+            content: section.content.replace(/HTML/g, 'Java').replace(/html/gi, 'java')
+        }));
+    </script>
 </body>
-</html>
+    </html>
